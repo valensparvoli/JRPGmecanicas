@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Fire Ball
   description: 
-  type: 1
+  type: 2
   power: 50
   accurancy: 100
   moveTimes: 15

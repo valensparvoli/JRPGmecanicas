@@ -14,8 +14,5 @@ public class Moves
         MOVETIMES = pBase.MovesTimes;
     }
 
-
-
-
 }
 

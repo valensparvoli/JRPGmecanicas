@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23987ca5054d8ee47a58bcf530979a34, type: 3}
-  m_Name: Water pistol
+  m_Name: Grass pistol
   m_EditorClassIdentifier: 
   moveName: Water pistol
   description: 

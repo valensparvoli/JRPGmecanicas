@@ -15,6 +15,7 @@ public class MoveBase : ScriptableObject
     [SerializeField] int accurancy;
     [SerializeField] int moveTimes;
 
+    /*Forma en la que hacemos que las variables de una clase sean propiedades*/
     public string MoveName
     {
         get { return moveName; }
@@ -44,5 +45,5 @@ public class MoveBase : ScriptableObject
     {
         get { return moveTimes; }
     }
-
+    /*--------------------------*/
 }

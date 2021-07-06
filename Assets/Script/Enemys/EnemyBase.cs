@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[ CreateAssetMenu(fileName ="Enemy", menuName ="Enemy/Create new enemy")]
+[ CreateAssetMenu(fileName ="Enemy", menuName ="Enemy/Create new enemy")] //Crea la posibilidad de crear desde unity nuevos objetos. 
 public class EnemyBase : ScriptableObject
 {
     [SerializeField] string enemyName;
@@ -81,10 +81,20 @@ public class EnemyBase : ScriptableObject
     {
         get { return learnablesMoves; }
     }
+
+    public Sprite BackSprite
+    {
+        get { return backSprite; }
+    }
+
+    public Sprite FrontSprite
+    {
+        get { return frontSprite; }
+    }
 }
 
 [System.Serializable]
-public class LearnableMove
+public class LearnableMove //Clase que muestra los movimientos que puede aprender una unidad 
 {
     [SerializeField] MoveBase moveBase;
     [SerializeField] int level;
@@ -99,9 +109,36 @@ public class LearnableMove
     }
 }
 
-public enum EnemyType
+public enum EnemyType //Establece los tipos de unidades que pueden existir
 {
+    None,
     Normal,
     Fire,
-    Water
+    Grass
+}
+
+public class TypeChart //Clase que crea la ventaja entre los diferentes tipos de unidades
+{
+    static float[][] chart =
+    {   
+        //                      Nor  Fir Grass
+        /*Normal*/ new float [ ]{1f, 1f, 1f},
+        /*Fire*/   new float [ ]{1f, 0.5f, 2f},
+        /*Grass*/  new float [ ]{1f, 0.5f, 0.5f}
+    };
+
+    public static float GetEffectiveness(EnemyType attackType, EnemyType defenseType) //Funcion que calcula la efectividad del ataque
+    {
+        if (attackType == EnemyType.None || defenseType == EnemyType.None)
+        {
+            return 1;
+        }
+
+        int row = (int)attackType - 1;
+        int col = (int)defenseType - 1;
+
+        return chart[row][col];
+            
+    }
+
 }
