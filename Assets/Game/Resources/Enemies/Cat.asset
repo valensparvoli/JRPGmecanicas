@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30ad7e029589266488428eabc916055b, type: 3}
+  m_Name: Cat
+  m_EditorClassIdentifier: 
+  enemyName: 
+  description: 
+  frontSprite: {fileID: 21300000, guid: f99b76905ba15304895ce4e0655fc04e, type: 3}
+  backSprite: {fileID: 21300000, guid: f98b60ee6903d9a48a41972c1a2518de, type: 3}
+  type1: 1
+  type2: 0
+  maxHP: 58
+  attack: 64
+  defense: 58
+  spAttack: 80
+  spDefense: 65
+  speed: 80
+  learnablesMoves:
+  - moveBase: {fileID: 11400000, guid: 235b93793ffcdf14f9fb806f285443f5, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: f515873eff842c343aa1cde297e7bf4d, type: 2}
+    level: 2

@@ -1,0 +1,48 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "Move", menuName = "Enemy/Create new move")]
+public class MoveBase : ScriptableObject
+{
+    [SerializeField] string moveName;
+
+    [TextArea]
+    [SerializeField] string description;
+
+    [SerializeField] EnemyType type;
+    [SerializeField] int power;
+    [SerializeField] int accurancy;
+    [SerializeField] int moveTimes;
+
+    public string MoveName
+    {
+        get { return moveName; }
+    }
+
+    public string Description
+    {
+        get { return description; }
+    }
+
+    public EnemyType Type
+    {
+        get { return type; }
+    }
+
+    public int Power
+    {
+        get { return power; }
+    }
+
+    public int Accurancy
+    {
+        get { return accurancy; }
+    }
+
+    public int MovesTimes
+    {
+        get { return moveTimes; }
+    }
+
+}
