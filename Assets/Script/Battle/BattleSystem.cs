@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public enum BattleState { Start, PlayerAction, PlayerMove, EnemyMove, Busy } //Busy state es cuando el player y el enemigo estan atacando
 
@@ -12,11 +13,13 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] BattleHUD enemyHud;
     [SerializeField] BattleDialogBox dialogBox;
 
+    public event Action<bool> OnBattleOver;
+
     BattleState state;
     int currentAction;
     int currentMove;
 
-    private void Start()
+    public void StartBattle()
     {
         StartCoroutine(SetUpBattle());
     }
@@ -57,21 +60,31 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.Busy; // Cambiamos el estado para poder ejecutar la accion
 
         var move = playerUnit.enemy.moves[currentMove]; //Guarda el movimiento a utilizar
+        move.MOVETIMES--; //reduce en uno la cantida de veces que podemos usar un movimiento
         yield return dialogBox.TypeDialog(playerUnit.enemy.Base.name + " used " + move.Base.MoveName);
-        
 
+        /*Animaciones referenciadas en el script de battleUnit para la pelea*/
+        playerUnit.PlayAttackAnimation();
+        yield return new WaitForSeconds(1f);
 
-        var damageDetails= enemyUnit.enemy.TakeDamage(move, playerUnit.enemy); //Hace daño y chequea si el enemigo se rindio
+        enemyUnit.PlayHitAnimation();
+        /*Animaciones referenciadas en el script de battleUnit para la pelea*/
+
+        var damageDetails = enemyUnit.enemy.TakeDamage(move, playerUnit.enemy); //Hace daño y chequea si el enemigo se rindio
         yield return enemyHud.UpdateHP(); //Modifica la barra de vida del enemigo
         yield return ShowDamageDetails(damageDetails); //Influye en el dialogo de la accion relazida (Critico o efectivo)
 
-        if (damageDetails.Surrended)
+        if (damageDetails.Surrended) //Solo ingresa si la vida es 0
         {
             yield return dialogBox.TypeDialog(enemyUnit.enemy.Base.Name + " get surrended");
+            enemyUnit.PlaySurrendedAnimation(); //Play a la animacion de muerte
+
+            yield return new WaitForSeconds(2f);
+            OnBattleOver(true); //Accion que determina que la batalla termino 
         }
         else
         {
-            StartCoroutine(EnemyMove());
+            StartCoroutine(EnemyMove());// Pasa el turno si no esta muerto
         }
     }
 
@@ -80,19 +93,31 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.EnemyMove;
 
         var move = enemyUnit.enemy.GetRandomMove();
+        move.MOVETIMES--; //reduce en uno la cantida de veces que podemos usar un movimiento
         yield return dialogBox.TypeDialog(enemyUnit.enemy.Base.name + " used " + move.Base.MoveName);
+
+        /*Animaciones referenciadas en el script de battleUnit para la pelea*/
+        enemyUnit.PlayAttackAnimation();
+        yield return new WaitForSeconds(1f);
+
+        playerUnit.PlayHitAnimation();
+        /*Animaciones referenciadas en el script de battleUnit para la pelea*/
 
         var damageDetails = playerUnit.enemy.TakeDamage(move, playerUnit.enemy);
         yield return playerHud.UpdateHP(); //Quita vida al playerUnit
         yield return ShowDamageDetails(damageDetails); //Influye en el dialogo de la accion relazida (Critico o efectivo)
 
-        if (damageDetails.Surrended)
+        if (damageDetails.Surrended) //Solo ingresa si la vida es 0
         {
             yield return dialogBox.TypeDialog(playerUnit.enemy.Base.Name + " get surrended");
+            playerUnit.PlaySurrendedAnimation(); //Play a la animacion de muerte
+
+            yield return new WaitForSeconds(2f);
+            OnBattleOver(true);//Accion que determina que la batalla termino 
         }
         else
         {
-            PlayerAction();
+            PlayerAction(); //Cambia el turno 
         }
     }
 
@@ -112,7 +137,7 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    private void Update()//Checkea los diferentes estados del player
+    public void HandleUpdate()//Checkea los diferentes estados del player
     {
         if (state == BattleState.PlayerAction)
         {

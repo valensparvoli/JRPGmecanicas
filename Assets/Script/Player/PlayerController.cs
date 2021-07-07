@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed;
     public LayerMask solidObjetcLayer;
     public LayerMask longGrass;
+
+    public event Action OnEncounters;
 
     private bool isMovining;
     private Vector2 input;
@@ -19,7 +22,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    void Update()
+    public void HandleUpdate()
     {
         if (!isMovining)
         {
@@ -68,7 +71,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private bool IsWalkable(Vector3 targetPos)
+    private bool IsWalkable(Vector3 targetPos)//Checkea si el lugar a donde queremos dirigir nuestro player es o no es transitable
     {
        if(Physics2D.OverlapCircle(targetPos,0.2f,solidObjetcLayer) != null)
        {
@@ -78,13 +81,14 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
-    private void CheckForEncounters()
+    private void CheckForEncounters() //Crea encuentros random cuando caminamos por el pasto
     {
         if (Physics2D.OverlapCircle(transform.position, 0.2f, longGrass) != null)
         {
-            if (Random.Range(1, 101) <= 10)
+            if (UnityEngine.Random.Range(1, 101) <= 10)
             {
-                Debug.Log("Momento de pelear");
+                animator.SetBool("isMoving", false);
+                OnEncounters();
             }
 
         }

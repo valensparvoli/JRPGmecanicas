@@ -45,5 +45,19 @@ public class MoveBase : ScriptableObject
     {
         get { return moveTimes; }
     }
+
+    public bool isSpecial
+    {
+        get{
+            if (type == EnemyType.Fire || type == EnemyType.Grass)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            };
+        }
+    } //propiedad que registra si el movimiento es o no es especial.
     /*--------------------------*/
 }

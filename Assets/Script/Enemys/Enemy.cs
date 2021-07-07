@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy 
 {
 
-    //Se escribe en mayuscula cuando son propiedades y de esta forma podemos diferenciarla de una variable
+    /*Se escribe en mayuscula cuando son propiedades y de esta forma podemos diferenciarla de una variable*/
     public EnemyBase Base { get; set; }
     public int Level { get; set; }
 
@@ -59,6 +59,8 @@ public class Enemy
     {
         get { return Mathf.FloorToInt((Base.SpDefense * Level) / 100f) + 5; } //Forma en la que se toma la estadistica en pokemon
     }
+    /*-----------------------------------------------*/
+
 
     public DamageDetails TakeDamage(Moves moves, Enemy attacker) 
     {
@@ -79,11 +81,16 @@ public class Enemy
             Surrended = false
         };
 
+        float attack = (moves.Base.isSpecial) ? attacker.SpAttack : attacker.Attack;
+        float defense = (moves.Base.isSpecial) ? attacker.SpDefense : attacker.Defense;
+        /* La variable de arriba registra el tipo de ataque, sea especial o no. La forma en la que se 
+         registra es como un if. Si move.base.isSpecial es true, se ejecuta la primera parte antes de los dos 
+        puntos y sino se ejecuta la segunda parte */
 
         //Forma que se utiliza en los juegos de pokemon para controlar el daño dependiendo de las stats de la unidad
         float modifier = Random.Range(0.85f, 1f)* type*critical;  
         float a = (2 * attacker.Level + 10) / 250f;
-        float d = a * moves.Base.Power * ((float)attacker.Attack / Defense) + 2;
+        float d = a * moves.Base.Power * ((float)attack/ defense) + 2;
         int damage = Mathf.FloorToInt(d * modifier);
         //
 
