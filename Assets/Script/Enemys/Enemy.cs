@@ -2,21 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[ System.Serializable]
 public class Enemy 
 {
+    [SerializeField] EnemyBase _base;
+    [SerializeField] int level;
 
     /*Se escribe en mayuscula cuando son propiedades y de esta forma podemos diferenciarla de una variable*/
-    public EnemyBase Base { get; set; }
-    public int Level { get; set; }
+    public EnemyBase Base {
+        get
+        {
+            return _base;
+        }
+    }
+    public int Level {
+        get
+        {
+            return level;
+        } 
+    }
 
     public int HP { get; set; }
 
     public List<Moves> moves { get; set; }
 
-    public Enemy(EnemyBase eBase, int eLevel)
+    public void Init()
     {
-        Base = eBase;
-        Level = eLevel;
+
         HP = MaxHP;
 
         //Genera los movimientos en los enemigos

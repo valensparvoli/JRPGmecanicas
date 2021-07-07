@@ -6,8 +6,7 @@ using DG.Tweening;
 
 public class BattleUnit : MonoBehaviour
 {
-    [SerializeField] EnemyBase _base;
-    [SerializeField] int level;
+    
     [SerializeField] bool isPlayerUnit;
 
     public Enemy enemy { get; set; }
@@ -23,9 +22,9 @@ public class BattleUnit : MonoBehaviour
         originalColor = image.color;
     }
 
-    public void SetUp() //Establece que tipo de imagen se cargara cuando comience la batalla
+    public void SetUp(Enemy _enemy) //Establece que tipo de imagen se cargara cuando comience la batalla
     {
-        enemy= new Enemy(_base, level);
+        enemy = _enemy;
         if (isPlayerUnit)
             image.sprite = enemy.Base.BackSprite;
         else

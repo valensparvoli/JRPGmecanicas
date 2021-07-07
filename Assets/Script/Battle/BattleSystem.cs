@@ -19,15 +19,20 @@ public class BattleSystem : MonoBehaviour
     int currentAction;
     int currentMove;
 
-    public void StartBattle()
+    EnemyParty playerParty;
+    Enemy wildEnemy;
+
+    public void StartBattle(EnemyParty playerParty, Enemy wildEnemy)
     {
+        this.playerParty = playerParty;
+        this.wildEnemy = wildEnemy;
         StartCoroutine(SetUpBattle());
     }
 
     public IEnumerator SetUpBattle() //Corrutina que da comienzo a la pelea
     {
-        playerUnit.SetUp();
-        enemyUnit.SetUp();
+        playerUnit.SetUp(playerParty.GetHealthyEnemy());
+        enemyUnit.SetUp(wildEnemy);
         playerHud.SetData(playerUnit.enemy);
         enemyHud.SetData(enemyUnit.enemy);
 
@@ -80,7 +85,7 @@ public class BattleSystem : MonoBehaviour
             enemyUnit.PlaySurrendedAnimation(); //Play a la animacion de muerte
 
             yield return new WaitForSeconds(2f);
-            OnBattleOver(true); //Accion que determina que la batalla termino 
+            OnBattleOver(false); //Accion que determina que la batalla termino 
         }
         else
         {
@@ -113,7 +118,24 @@ public class BattleSystem : MonoBehaviour
             playerUnit.PlaySurrendedAnimation(); //Play a la animacion de muerte
 
             yield return new WaitForSeconds(2f);
-            OnBattleOver(true);//Accion que determina que la batalla termino 
+
+            var nextUnit = playerParty.GetHealthyEnemy();
+            if (nextUnit != null)
+            {
+                playerUnit.SetUp(nextUnit);
+                playerHud.SetData(nextUnit);
+
+                dialogBox.SetMoveNames(nextUnit.moves);
+
+                yield return dialogBox.TypeDialog("Go " + nextUnit.Base.Name + " !");
+
+
+                PlayerAction();
+            }
+            else
+            {
+                OnBattleOver(true); //Accion que determina que la batalla termino 
+            }
         }
         else
         {
